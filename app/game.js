@@ -74,10 +74,7 @@ function goHTML5Audio() {
     loadAssetsAndGo();
   }
 
-var UUID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-    return v.toString(16);
-});
+
 
 var slumberGame = new Firebase('https://slumberparty.firebaseIO.com/game');
 var slumberReadyRef = new Firebase('https://slumberparty.firebaseIO.com/ready');
@@ -93,7 +90,7 @@ slumberReadyRef.on('child_added', function(snapshot) {
   }
 });
 
-var slumberUsersRef = new Firebase('https://slumberparty.firebaseIO.com/users');
+
 slumberUsersRef.on('child_added', function(snapshot) {
   var contents = snapshot.val();
   //var message = snapshot.message();
@@ -145,8 +142,7 @@ slumberGame.on('value', function(snapshot){
 });
 
 //slumberDataRef.push({'name': 'Sam', 'message' : UUID});
-var con = slumberUsersRef.push({'name': playerName, 'UUID': UUID});
-con.onDisconnect().remove();
+
 //slumberDataRef.update({'test': UUID});
 
 
@@ -267,18 +263,21 @@ Q.UI.Text.extend("Announcer", {
       this.calcSize();
       this.p.bubble.fit(2,5);
       gameOver = true;
+      readyCon.remove();
     } else if (playerHP <= 0 && opponentHP > 0 && !gameOver) {
       globalMessage = opponentName +  " wins the match!";
       this.p.label = globalMessage;
       this.calcSize();
       this.p.bubble.fit(2,5);
       gameOver = true;
+      readyCon.remove();
     } else if (playerHP > 0 && opponentHP <= 0 && !gameOver) {
       globalMessage = playerName +  " wins the match!";
       this.p.label = globalMessage;
       this.calcSize();
       this.p.bubble.fit(2,5);
       gameOver = true;
+      readyCon.remove();
     }
   }
 });

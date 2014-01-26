@@ -8,6 +8,17 @@ html, body {
     overflow: hidden;
 }
 
+#namebox {
+    background-color: rgb(50,50,50);
+    position: relative;
+    
+    margin-top: auto;
+}
+
+.fancyInput {
+    
+}
+
 .nopadding {
    padding: 0 !important;
    margin: 0 !important;
