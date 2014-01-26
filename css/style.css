@@ -1,0 +1,707 @@
+*:focus {
+    outline: none !important;
+}
+
+
+.top_bar {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.top_bar:focus {
+  top:-200px;
+}
+#editor {
+    height: 208px;
+    width: 74.9999999%;
+    border: 0px solid #DDD;
+    border-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top: 0px;
+    position:absolute;
+    bottom:0px;
+
+
+}
+
+#editor2 {
+    height: 208px;
+    width: 74.9999999%;
+    border: 0px solid #DDD;
+    border-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top: 0px;
+    position:absolute;
+    bottom:0px;
+    z-index: 2000px;
+
+
+}
+
+
+
+.ace-container {
+    height: 248px;
+    width: 100%;
+    border: 0px solid #DDD;
+    border-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top: 0px;
+    position:absolute;
+    bottom:0px;
+}
+
+#canvas_game {
+	position:relative;
+	top:0px;
+	left:0%;
+  bottom:0px;
+}
+
+#game_container {
+  position: relative;
+  margin: -5px auto;
+}
+
+.container{
+	position:relative;
+}
+
+
+.codex{
+  background-color: rgba(240, 240, 240, 1);
+  border-bottom-color: rgba(0, 0, 0, 0.109804);
+  border-bottom-left-radius: 2px;
+border-bottom-right-radius: 2px;
+border-bottom-style: solid;
+border-bottom-width: 1px;
+border-image-outset: 0px;
+border-image-repeat: stretch;
+border-image-slice: 100%;
+border-image-source: none;
+border-image-width: 1;
+border-left-color: rgba(0, 0, 0, 0.109804);
+border-left-style: solid;
+border-left-width: 1px;
+border-right-color: rgba(0, 0, 0, 0.109804);
+border-right-style: solid;
+border-right-width: 1px;
+border-top-color: rgba(0, 0, 0, 0.109804);
+border-top-left-radius: 2px;
+border-top-right-radius: 2px;
+border-top-style: solid;
+border-top-width: 1px;
+box-sizing: border-box;
+color: rgb(51, 51, 51);
+display: inline;
+font-family: monospace;
+font-size: 13px;
+height: auto;
+line-height: 22px;
+padding-bottom: 1.912500023841858px;
+padding-left: 3.1875px;
+padding-right: 3.1875px;
+padding-top: 1.912500023841858px;
+position: relative;
+z-index: 3;
+}
+
+h3 {
+    font-size: 24px;
+    line-height: 40px;
+}
+
+
+#tabs {
+  background-color: rgb(50, 50, 50);
+  margin-bottom: 0px;
+  border-bottom-width: 0px;
+  position: relative;
+
+  }
+
+
+
+#console {
+	height: 100%;
+    border: 0px solid #DDD;
+    border-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top: 0px;
+    margin-left: 0px;
+    background-color: rgb(50,50,50);
+}
+
+#text-area{
+  overflow:scroll;
+  padding-bottom: 90px;
+}
+
+#sidebar {
+	height: 100%;
+	border: 0px solid #DDD;
+    border-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top: 0px;
+
+}
+
+#sidebar-footer {
+  position: absolute;
+  height: 40px;
+  bottom: 0px;
+  background-color: rgb(80,80,80); 
+}
+
+#loading {
+      margin:50px auto;
+      max-width:1024px;
+      position:fixed;
+      width:100%;
+      height:50%;
+      text-align:center;
+    }
+
+#loading_container {
+      position:relative;
+      margin:0 auto;
+      width:50%;
+      height:20px;
+      border:1px solid black;
+      text-align:center;
+      padding-top:10px;
+    }
+
+#loading_progress {
+      width:0%;
+      background-color:red;
+      position:absolute;
+      height:30px;
+      top:0px;
+      left:0px;
+      opacity:0.4;
+    }
+
+#game {
+      image-rendering: optimizeSpeed;             // Older versions of FF
+      image-rendering: -moz-crisp-edges;          // FF 6.0+
+      image-rendering: -webkit-optimize-contrast; // Webkit
+      //  (Safari now, Chrome soon)
+      image-rendering: -o-crisp-edges;            // OS X & Windows Opera (12.02+)
+      image-rendering: optimize-contrast;         // Possible future browsers.
+      -ms-interpolation-mode: nearest-neighbor;   // IE
+      
+}
+
+
+html, body {
+
+        height: 100%;
+        width: 100%;
+        position:absolute;
+    }
+    .container-fluid{
+    	height: 100%;
+    	-moz-box-sizing: border-box;
+    	-webkit-box-sizing: border-box;
+    	box-sizing: border-box:
+    }
+.row-fluid { height: inherit;
+			overflow:hidden; }
+
+.nospace {
+	left-margin:0px;
+}
+
+body {
+    padding-top:40px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+
+
+
+/*
+ * Bootstrap Grid System without space
+ *
+ * Overwrite Bootstrap grid system, removing margin
+ * Usage : 
+ * Simple add no-space class with row-fluid
+ * <ul class="row-fluid no-space"> ... </ul>
+ */
+.row-fluid.no-space [class*="span"] {
+  margin-left: 0%;
+  *margin-left: -0.06944%;
+}
+.row-fluid.no-space [class*="span"]:first-child {
+  margin-left: 0;
+}
+.row-fluid.no-space .controls-row [class*="span"] + [class*="span"] {
+  margin-left: 0%;
+}
+.row-fluid.no-space .span12 {
+  width: 99.99999999999999%;
+  *width: 99.93055555555554%;
+}
+.row-fluid.no-space .span11 {
+  width: 91.66666666666666%;
+  *width: 91.59722222222221%;
+}
+.row-fluid.no-space .span10 {
+  width: 83.33333333333331%;
+  *width: 83.26388888888887%;
+}
+.row-fluid.no-space .span9 {
+  width: 74.99999999999999%;
+  *width: 74.93055555555554%;
+}
+.row-fluid.no-space .span8 {
+  width: 66.66666666666666%;
+  *width: 66.59722222222221%;
+}
+.row-fluid.no-space .span7 {
+  width: 58.33333333333333%;
+  *width: 58.263888888888886%;
+}
+.row-fluid.no-space .span6 {
+  width: 49.99999999999999%;
+  *width: 49.93055555555555%;
+}
+.row-fluid.no-space .span5 {
+  width: 41.66666666666666%;
+  *width: 41.597222222222214%;
+}
+.row-fluid.no-space .span4 {
+  width: 33.33333333333333%;
+  *width: 33.263888888888886%;
+}
+.row-fluid.no-space .span3 {
+  width: 24.999999999999996%;
+  *width: 24.930555555555554%;
+}
+.row-fluid.no-space .span2 {
+  width: 16.666666666666664%;
+  *width: 16.59722222222222%;
+}
+.row-fluid.no-space .span1 {
+  width: 8.333333333333332%;
+  *width: 8.263888888888888%;
+}
+.row-fluid.no-space .offset12 {
+  margin-left: 99.99999999999999%;
+  *margin-left: 99.8611111111111%;
+}
+.row-fluid.no-space .offset12:first-child {
+  margin-left: 99.99999999999999%;
+  *margin-left: 99.8611111111111%;
+}
+.row-fluid.no-space .offset11 {
+  margin-left: 91.66666666666666%;
+  *margin-left: 91.52777777777777%;
+}
+.row-fluid.no-space .offset11:first-child {
+  margin-left: 91.66666666666666%;
+  *margin-left: 91.52777777777777%;
+}
+.row-fluid.no-space .offset10 {
+  margin-left: 83.33333333333331%;
+  *margin-left: 83.19444444444443%;
+}
+.row-fluid.no-space .offset10:first-child {
+  margin-left: 83.33333333333331%;
+  *margin-left: 83.19444444444443%;
+}
+.row-fluid.no-space .offset9 {
+  margin-left: 74.99999999999999%;
+  *margin-left: 74.8611111111111%;
+}
+.row-fluid.no-space .offset9:first-child {
+  margin-left: 74.99999999999999%;
+  *margin-left: 74.8611111111111%;
+}
+.row-fluid.no-space .offset8 {
+  margin-left: 66.66666666666666%;
+  *margin-left: 66.52777777777777%;
+}
+.row-fluid.no-space .offset8:first-child {
+  margin-left: 66.66666666666666%;
+  *margin-left: 66.52777777777777%;
+}
+.row-fluid.no-space .offset7 {
+  margin-left: 58.33333333333333%;
+  *margin-left: 58.19444444444444%;
+}
+.row-fluid.no-space .offset7:first-child {
+  margin-left: 58.33333333333333%;
+  *margin-left: 58.19444444444444%;
+}
+.row-fluid.no-space .offset6 {
+  margin-left: 49.99999999999999%;
+  *margin-left: 49.86111111111111%;
+}
+.row-fluid.no-space .offset6:first-child {
+  margin-left: 49.99999999999999%;
+  *margin-left: 49.86111111111111%;
+}
+.row-fluid.no-space .offset5 {
+  margin-left: 41.66666666666666%;
+  *margin-left: 41.52777777777777%;
+}
+.row-fluid.no-space .offset5:first-child {
+  margin-left: 41.66666666666666%;
+  *margin-left: 41.52777777777777%;
+}
+.row-fluid.no-space .offset4 {
+  margin-left: 33.33333333333333%;
+  *margin-left: 33.19444444444444%;
+}
+.row-fluid.no-space .offset4:first-child {
+  margin-left: 33.33333333333333%;
+  *margin-left: 33.19444444444444%;
+}
+.row-fluid.no-space .offset3 {
+  margin-left: 24.999999999999996%;
+  *margin-left: 24.86111111111111%;
+}
+.row-fluid.no-space .offset3:first-child {
+  margin-left: 24.999999999999996%;
+  *margin-left: 24.86111111111111%;
+}
+.row-fluid.no-space .offset2 {
+  margin-left: 16.666666666666664%;
+  *margin-left: 16.52777777777778%;
+}
+.row-fluid.no-space .offset2:first-child {
+  margin-left: 16.666666666666664%;
+  *margin-left: 16.52777777777778%;
+}
+.row-fluid.no-space .offset1 {
+  margin-left: 8.333333333333332%;
+  *margin-left: 8.194444444444443%;
+}
+.row-fluid.no-space .offset1:first-child {
+  margin-left: 8.333333333333332%;
+  *margin-left: 8.194444444444443%;
+}
+
+
+
+
+
+
+
+
+
+/*
+ * CSS Styles that are needed by jScrollPane for it to operate correctly.
+ *
+ * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
+ * may not operate correctly without them.
+ */
+
+.scroll-pane
+      {
+        width: 100%;
+        height: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+.jspContainer
+{
+  overflow: hidden;
+  position: relative;
+}
+
+.jspPane
+{
+  position: absolute;
+}
+
+.jspVerticalBar
+{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 100%;
+  background: black;
+}
+
+.jspHorizontalBar
+{
+  display: none !important;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  background: red;
+}
+
+.jspVerticalBar *,
+.jspHorizontalBar *
+{
+  margin: 0;
+  padding: 0;
+}
+
+.jspCap
+{
+  display: none;
+}
+
+.jspHorizontalBar .jspCap
+{
+  float: left;
+}
+
+.jspTrack
+{
+  background: #dde;
+  position: relative;
+}
+
+.jspDrag
+{
+  background: rgb(60,60,60);
+  position: relative;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.jspHorizontalBar .jspTrack,
+.jspHorizontalBar .jspDrag
+{
+  float: left;
+  height: 100%;
+}
+
+.jspArrow
+{
+  background: #50506d;
+  text-indent: -20000px;
+  display: block;
+  cursor: pointer;
+}
+
+.jspArrow.jspDisabled
+{
+  cursor: default;
+  background: #80808d;
+}
+
+.jspVerticalBar .jspArrow
+{
+  height: 16px;
+}
+
+.jspHorizontalBar .jspArrow
+{
+  width: 16px;
+  float: left;
+  height: 100%;
+}
+
+.jspVerticalBar .jspArrow:focus
+{
+  outline: none;
+}
+
+.jspCorner
+{
+  background: #eeeef4;
+  float: left;
+  height: 100%;
+}
+
+/* Yuk! CSS Hack for IE6 3 pixel bug :( */
+* html .jspCorner
+{
+  margin: 0 -3px 0 0;
+}
+
+.objective {
+
+background-color: rgb(255, 255, 255);
+border-color: rgb(250, 200, 100);
+border-style: solid;
+border-width: 1px;
+border-image-outset: 0 0 0 0;
+border-image-repeat: stretch stretch;
+border-image-slice: 100% 100% 100% 100%;
+border-image-source: none;
+border-image-width: 1 1 1 1;
+color: rgb(66, 66, 66);
+display: inline-block;
+font-family: "Open Sans","Helvetica Neue",sans-serif;
+font-size: 20px;
+font-weight: 700;
+height: 30.5px;
+line-height: 31.2px;
+margin: 0 auto;
+display:block;
+width: 30%;
+text-align: center;
+white-space: nowrap;
+position: relative;
+z-index: 6;
+}
+
+/* light blue: 197, 223, 234*/
+/* lb background: 240, 250, 255*/
+.objective-box {
+
+background-color: rgb(252, 237, 210);
+border-color: rgb(250, 200, 100);
+border-style: solid;
+border-width: 1px;
+color: rgb(51, 51, 51);
+font-family: "Open Sans","Helvetica Neue",sans-serif;
+font-size: 15px;
+line-height: 22px;
+margin-top: -25px;
+padding-bottom: 25px;
+padding-left: 0px;
+padding-right: 0px;
+padding-top: 25px;
+position: relative;
+z-index: 5;
+-moz-box-sizing: border-box;
+
+}
+
+
+.navbar-inner {
+background: #191919; /* Old browsers */
+/* background: -moz-linear-gradient(top,  #3c3c3c 0%, #1c1c1c 57%, #191919 100%); /* FF3.6+ */
+/* background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3c3c3c), color-stop(57%,#1c1c1c), color-stop(100%,#191919)); /* Chrome,Safari4+ */
+/* background: -webkit-linear-gradient(top,  #3c3c3c 0%,#1c1c1c 57%,#191919 100%); /* Chrome10+,Safari5.1+ */
+/* background: -o-linear-gradient(top,  #3c3c3c 0%,#1c1c1c 57%,#191919 100%); /* Opera 11.10+ */
+/* background: -ms-linear-gradient(top,  #3c3c3c 0%,#1c1c1c 57%,#191919 100%); /* IE10+ */
+/* background: linear-gradient(to bottom,  #3c3c3c 0%,#1c1c1c 57%,#191919 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3c3c3c', endColorstr='#191919',GradientType=0 ); /* IE6-9 */
+
+    min-height: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border:0px;
+    border-radius: 0px;
+}
+
+.dropdown-menu {
+    background-clip: padding-box;
+    background-color: rgba(60,60,60,0.9);
+    border: 0px solid rgba(0, 0, 0, 0.2);
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    float: left;
+    left: 0;
+    list-style: none outside none;
+    margin: 0px 0 0;
+    min-width: 160px;
+    padding: 0px 0;
+    position: absolute;
+    top: 100%;
+    z-index: 1000;
+}
+
+.sidebar-top {
+background-color: rgb(255, 255, 255);
+background-image: -webkit-linear-gradient(top, rgb(255, 255, 255), rgb(240, 240, 240));
+background-image: -moz-linear-gradient(50% 0%, rgb(255, 255, 255), rgb(240, 240, 240));
+background-repeat: repeat-x;
+border-bottom-color: rgba(0, 0, 0, 0.14902);
+border-bottom-style: solid;
+border-bottom-width: 1px;
+box-sizing: border-box;
+color: rgb(51, 51, 51);
+display: block;
+font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+font-size: 15px;
+height: 50px;
+line-height: 22px;
+zoom: 1;
+
+}
+
+.sidebar-topside {
+  color: black !important;
+}
+
+.btn-group.open .btn.dropdown-toggle {
+  background-color: black;
+}
+
+.btn-group.open .btn.dropdown-toggle {
+  background-color:black;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  color:black;
+  background-color:rgba(50,50,50,1);
+}
+
+.navbar .nav > li > a {
+    color: white;
+    float: none;
+    padding: 10px 15px;
+    text-decoration: none;
+    text-shadow: 0 0px 0 #ffffff;
+}
+
+.navbar .brand {
+  display: block;
+  float: left;
+  padding: 10px 20px 10px;
+  margin-left: -20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: white;
+  text-shadow: 0 0px 0 #ffffff;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+  color: white;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.navbar-text {
+  margin-bottom: 0;
+  line-height: 40px;
+  color: white;
+}
+
+.dropdown-menu li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 20px;
+  color: white;
+  white-space: nowrap;
+}
+
+.navbar-link {
+  color: white;
+}
+
+.navbar-link:hover {
+  color: white;
+}
+
+.btn-flat { 
+  color: #ffffff; 
+  background-color: #ffffff; 
+  border-color: #ffffff; 
+} 
+ 
