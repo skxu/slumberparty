@@ -23,7 +23,6 @@
   <script src='lib/firebase.js'></script>  
 
 
-  <script src='lib/raphael.js'></script>
   
   <!--
   <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.2/firebase.js'></script>
@@ -72,9 +71,14 @@
           <canvas id="game"> </canvas>
         </div>
       </div>
-      <div id="playerHP" class="200x160px"></div>
-      <div id="opponentHP" class="200x160px"></div>
-      
+      <div  id="playerHP" class="progress progress-striped active">
+        <div id= "playerHPBar" class="progress-bar"  role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+        </div>
+      </div>
+      <div  id="opponentHP" class="progress progress-striped active">
+        <div id="opponentHPBar" class="progress-bar"  role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+        </div>
+      </div>
     </div>
   </div>
   <script src='lib/fancyInput.js'></script>
@@ -104,30 +108,7 @@
     }
   }
   </script>
-  <script src='lib/justgage.js'></script>
-  <script>
-    var playerGage = new JustGage({
-    id:"playerHP",
-    value: 50,
-    gaugeWidthScale: 0.5,
-    valueFontColor: "#FFFFFF",
-    levelColors: ["#E63922", "#E8D548", "#45BD24"],
-    min: 0,
-    max: 100,
-    title: ' ',
-    });
-
-    var opponentGage = new JustGage({
-    id:"opponentHP",
-    value: 50,
-    gaugeWidthScale: 0.5,
-    valueFontColor: "#FFFFFF",
-    levelColors: ["#E63922", "#E8D548", "#45BD24"],
-    min: 0,
-    max: 100,
-    title: ' ',
-    });
-  </script>
+  
 
 </body>
 

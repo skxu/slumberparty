@@ -91,12 +91,6 @@ slumberReadyRef.on('child_added', function(snapshot) {
 });
 
 
-slumberUsersRef.on('child_added', function(snapshot) {
-  var contents = snapshot.val();
-  //var message = snapshot.message();
-  //console.log("We have a new user: " + contents.name);
-  globalMessage = contents.name + " has joined the game";
-});
 
 slumberUsersRef.on('child_removed', function(snapshot) {
   var userName = snapshot.name();
@@ -112,16 +106,15 @@ slumberUsersRef.on('child_removed', function(snapshot) {
 
 slumberUsersRef.on('child_added', function(snapshot) {
   var contents = snapshot.val();
+  console.log(contents.name + " AAAAAAAAA");
   if (contents === null) {
     opponentConnected = false;
     opponentName = 'noOpponent';
-  } else if (gameStarted == false && contents.UUID != UUID) {
+  } else if (!gameStarted && contents.UUID != UUID) {
     opponentConnected = true;
     opponentName = contents.name;
-  } else {
-    opponentConnected = false;
-    opponentName = 'Waiting for Opponent';
-  }
+    globalMessage = contents.name + " has joined the game";
+  } 
 });
 
 slumberGame.on('value', function(snapshot){
@@ -264,6 +257,23 @@ Q.UI.Text.extend("Announcer", {
       this.p.bubble.fit(2,5);
       gameOver = true;
       readyCon.remove();
+      Q.stage().insert(new Q.UI.Button ({
+        label: "REMATCH",
+        fill: "#FFFFFF",
+        y: Q.height - 300,
+        x: Q.width/2,
+        border: 5,
+      }, function() {
+        opponentHP = "50"
+        playerHP = "50"
+        gameOver = false;
+        gameStarted = false;
+        playerReady = true;
+
+        readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
+        readyCon.onDisconnect().remove();
+        this.destroy();
+      }));
     } else if (playerHP <= 0 && opponentHP > 0 && !gameOver) {
       globalMessage = opponentName +  " wins the match!";
       this.p.label = globalMessage;
@@ -271,6 +281,23 @@ Q.UI.Text.extend("Announcer", {
       this.p.bubble.fit(2,5);
       gameOver = true;
       readyCon.remove();
+      Q.stage().insert(new Q.UI.Button ({
+        label: "REMATCH",
+        fill: "#FFFFFF",
+        y: Q.height - 300,
+        x: Q.width/2,
+        border: 5,
+      }, function() {
+        opponentHP = "50"
+        playerHP = "50"
+        gameOver = false;
+        gameStarted = false;
+        playerReady = true;
+
+        readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
+        readyCon.onDisconnect().remove();
+        this.destroy();
+      }));
     } else if (playerHP > 0 && opponentHP <= 0 && !gameOver) {
       globalMessage = playerName +  " wins the match!";
       this.p.label = globalMessage;
@@ -278,6 +305,23 @@ Q.UI.Text.extend("Announcer", {
       this.p.bubble.fit(2,5);
       gameOver = true;
       readyCon.remove();
+      Q.stage().insert(new Q.UI.Button ({
+        label: "REMATCH",
+        fill: "#FFFFFF",
+        y: Q.height - 300,
+        x: Q.width/2,
+        border: 5,
+      }, function() {
+        opponentHP = "50"
+        playerHP = "50"
+        gameOver = false;
+        gameStarted = false;
+        playerReady = true;
+
+        readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
+        readyCon.onDisconnect().remove();
+        this.destroy();
+      }));
     }
   }
 });
@@ -294,11 +338,11 @@ Q.Sprite.extend("Countdown", {
     this.add('animation');
   },
   step: function(dt) {
-    if (this.p.frame == 6 && playerReady && opponentReady && !gameStarted) {
+    if (this.p.frame == 6 && playerReady && opponentReady && !gameStarted && !gameOver) {
       countingDown = true;
       this.p.frame = 5;
       this.play('countdown');
-    } else if (this.p.frame != 6 && playerReady && opponentReady && !gameStarted) {
+    } else if (this.p.frame != 6 && playerReady && opponentReady && !gameStarted && !gameOver) {
       this.play('countdown');
     }
 
@@ -372,7 +416,8 @@ Q.UI.Text.extend("OpponentHP", {
   step: function(dt) {
     if (this.p.label != opponentHP) {
       this.p.label = opponentHP;
-      opponentGage.refresh(parseInt(opponentHP));
+      var element = document.getElementById("opponentHPBar");
+      element.style.width = Math.floor((opponentHP/100)*100) + "%";
     }
   }
 });
@@ -393,7 +438,8 @@ Q.UI.Text.extend("PlayerHP", {
   step: function(dt) {
     if (this.p.label != playerHP) {
       this.p.label = playerHP;
-      playerGage.refresh(parseInt(playerHP));
+      var element = document.getElementById("playerHPBar");
+      element.style.width = Math.floor((playerHP/100)*100) + "%";
     }
   }
 });
@@ -511,6 +557,7 @@ Q.Sprite.extend("Zzz", {
   }
 });
 
+
 Q.Sprite.extend("Drowzee", {
   init: function(p) {
     this._super(p, {
@@ -621,10 +668,12 @@ Q.scene("level1",function(stage) {
       readyCon.onDisconnect().remove();
     }));
 
+
+
   stage.insert(new Q.UI.Button({
     sheet:'audio',
     x:Q.width - 40,
-    y:Q.height - 80
+    y:Q.height - 40
   }, function() {
     if (!muteSFX) {
       this.p.frame = 0;
