@@ -63,6 +63,10 @@
       <input id='name' type="text" placeholder="Your Name Here">
     </div>
   </div>
+  <div  id="about" style=" margin-top:100px; width:150px; margin-left:auto; margin-right:auto;">
+    
+    <a href="about.html"><div style="border-color:rgb(100,100,100); color:rgb(100,100,100); font-family:'Fjalla One'; font-size:20px; background-color: rgb(40,40,40);"class="btn btn-default">About</div></a>
+  </div>
   <div class="container nopadding">
     <div class="row nopadding">
       <div id="console">
@@ -103,6 +107,7 @@
       con.onDisconnect().remove();
       $('#namebox').hide();
       $('#title').hide();
+      $('#about').hide();
       $('#game').show();
       return false;
     }

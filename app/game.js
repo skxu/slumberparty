@@ -17,7 +17,8 @@ var readyCon = '';
 var muteBGM = false;
 var muteSFX = false;
 var gameOver = false;
-
+var rematch_player = false;
+var rematch_opponent = false;
 
 
 
@@ -256,6 +257,7 @@ Q.UI.Text.extend("Announcer", {
       this.calcSize();
       this.p.bubble.fit(2,5);
       gameOver = true;
+      opponentReady = false;
       readyCon.remove();
       Q.stage().insert(new Q.UI.Button ({
         label: "REMATCH",
@@ -269,6 +271,8 @@ Q.UI.Text.extend("Announcer", {
         gameOver = false;
         gameStarted = false;
         playerReady = true;
+        rematch_player = true;
+        rematch_opponent = true;
 
         readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
         readyCon.onDisconnect().remove();
@@ -280,6 +284,7 @@ Q.UI.Text.extend("Announcer", {
       this.calcSize();
       this.p.bubble.fit(2,5);
       gameOver = true;
+      opponentReady = false;
       readyCon.remove();
       Q.stage().insert(new Q.UI.Button ({
         label: "REMATCH",
@@ -293,6 +298,8 @@ Q.UI.Text.extend("Announcer", {
         gameOver = false;
         gameStarted = false;
         playerReady = true;
+        rematch_player = true;
+        rematch_opponent = true;
 
         readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
         readyCon.onDisconnect().remove();
@@ -317,6 +324,8 @@ Q.UI.Text.extend("Announcer", {
         gameOver = false;
         gameStarted = false;
         playerReady = true;
+        rematch_player = true;
+        rematch_opponent = true;
 
         readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
         readyCon.onDisconnect().remove();
@@ -574,9 +583,22 @@ Q.Sprite.extend("Drowzee", {
   step: function(dt) {
     var framerate = 1;
     if (this.p.y > 1500 || this.p.spinoff < -50 || this.p.spinoff > 50) {
-      this.destroy();
+      //this.hide();
+      console.log("^_^");
     }
     if (this.p.player) {
+      if (rematch_player) {
+        this.p.dead = false;
+        this.p.x = Q.width/4;
+        this.p.y = 3*Q.height/4;
+        this.p.vx = 0;
+        this.p.vy = 0;
+        this.p.ay = 0;
+        this.p.ax = 0;
+        this.p.angle = 0;
+        this.p.gravity = 0;
+        rematch_player = false;
+      }
       framerate = Math.max(parseInt(playerHP)/400, 1/25);
       if (playerHP <= 0) {
         
@@ -599,6 +621,18 @@ Q.Sprite.extend("Drowzee", {
 
       
     } else {
+      if (rematch_opponent) {
+        this.p.dead = false;
+        this.p.x = 3*Q.width/4;
+        this.p.y = 3*Q.height/4;
+        this.p.vx = 0;
+        this.p.vy = 0;
+        this.p.ay = 0;
+        this.p.ax = 0;
+        this.p.angle = 0;
+        this.p.gravity = 0;
+        rematch_opponent = false;
+      }
       framerate = Math.max(opponentHP/400, 1/50);
       if (opponentHP <= 0) {
         this.p.angle = -140;
@@ -644,7 +678,7 @@ Q.scene("level1",function(stage) {
   stage.insert(new Q.Zzz({frame: 1, x:player.p.x + 180, y:player.p.y - 100, drowzee:player}));
 
 
-  var opponent = stage.insert(new Q.Drowzee({player:false, direction:"left", x:3*Q.width/4 - 10, y:3*Q.height/4}));
+  var opponent = stage.insert(new Q.Drowzee({player:false, direction:"left", x:3*Q.width/4, y:3*Q.height/4}));
   stage.insert(new Q.Wave({angle: 120 + (Math.random() * 40), direction: "left", x:opponent.p.x - 70, y:opponent.p.y - 40, frame:7, drowzee:opponent}));
   stage.insert(new Q.Zzz({direction:"right", frame: 1, x:opponent.p.x - 180, y:opponent.p.y - 100, drowzee:opponent}));
 
