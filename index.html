@@ -21,6 +21,10 @@
   <script src='lib/quintus_audio.js'></script>
   <script src='lib/quintus_tmx.js'></script>
   <script src='lib/firebase.js'></script>  
+
+
+  <script src='lib/raphael.js'></script>
+  
   <!--
   <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.2/firebase.js'></script>
   -->
@@ -51,10 +55,9 @@
 
 </head>
 <body>
-  <div class="navbar navbar-default">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Slumber Party</a>
-    </div>
+
+  <div class="jumbotron" id="title">
+    <h1><img src="images/title.png"></h1>
   </div>
   <div class="input" id="namebox">
     <div class="fancyInput">
@@ -69,6 +72,9 @@
           <canvas id="game"> </canvas>
         </div>
       </div>
+      <div id="playerHP" class="200x160px"></div>
+      <div id="opponentHP" class="200x160px"></div>
+      
     </div>
   </div>
   <script src='lib/fancyInput.js'></script>
@@ -92,11 +98,37 @@
       var con = slumberUsersRef.push({'name': playerName, 'UUID': UUID});
       con.onDisconnect().remove();
       $('#namebox').hide();
+      $('#title').hide();
       $('#game').show();
       return false;
     }
   }
   </script>
+  <script src='lib/justgage.js'></script>
+  <script>
+    var playerGage = new JustGage({
+    id:"playerHP",
+    value: 50,
+    gaugeWidthScale: 0.5,
+    valueFontColor: "#FFFFFF",
+    levelColors: ["#E63922", "#E8D548", "#45BD24"],
+    min: 0,
+    max: 100,
+    title: ' ',
+    });
+
+    var opponentGage = new JustGage({
+    id:"opponentHP",
+    value: 50,
+    gaugeWidthScale: 0.5,
+    valueFontColor: "#FFFFFF",
+    levelColors: ["#E63922", "#E8D548", "#45BD24"],
+    min: 0,
+    max: 100,
+    title: ' ',
+    });
+  </script>
+
 </body>
 
 

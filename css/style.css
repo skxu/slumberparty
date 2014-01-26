@@ -8,6 +8,24 @@ html, body {
     overflow: hidden;
 }
 
+#playerHP {
+    position: absolute;
+    bottom: 10%;
+    left: 20px;
+    z-index: 500;
+    height: 200px;
+    width: 300px;
+}
+
+#opponentHP {
+    position: absolute;
+    bottom: 10%;
+    right: 20px;
+    z-index: 500;
+    height: 200px;
+    width: 300px;
+}
+
 #namebox {
     background-color: rgb(50,50,50);
     position: relative;
@@ -15,8 +33,10 @@ html, body {
     margin-top: auto;
 }
 
-.fancyInput {
-    
+.jumbotron {
+    margin-bottom: 0px;
+    background-color: rgb(50,50,50);
+    color: #FFFFFF;
 }
 
 .nopadding {

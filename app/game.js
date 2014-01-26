@@ -18,13 +18,16 @@ var muteBGM = false;
 var muteSFX = false;
 var gameOver = false;
 
+
+
+
 var opponentWave = '';
 var opponentZzz = '';
 window.addEventListener("load",function() {
   var myDiv = document.getElementById("console"); //has to use document.getElementById
   
   var divWidth = myDiv.offsetWidth;
-  var divHeight = myDiv.offsetHeight - 50;
+  var divHeight = myDiv.offsetHeight;
 
   var canvas = $("#game");
   canvas.prop({width: divWidth, height:divHeight});
@@ -32,12 +35,9 @@ window.addEventListener("load",function() {
   canvas.webkitImageSmoothingEnabled = false;
 
   $(window).resize(function() {
-    var myDiv = document.getElementById("console"); //has to use document.getElementById
-  if (debug) {
-    console.log("divID: console, width = " + myDiv.offsetWidth);
-  }
+  var myDiv = document.getElementById("console"); //has to use document.getElementById
   var divWidth = myDiv.offsetWidth;
-  var divHeight = myDiv.offsetHeight - 50;
+  var divHeight = myDiv.offsetHeight;
 
   var canvas = document.getElementById("#game"); //has to use document.getElementById
   if(canvas && canvas[0] && canvas[0].getContext('2d')) {
@@ -365,10 +365,12 @@ Q.UI.Text.extend("OpponentHP", {
       x: 0,
       y: 0
     });
+    this.hide();
   },
   step: function(dt) {
     if (this.p.label != opponentHP) {
       this.p.label = opponentHP;
+      opponentGage.refresh(parseInt(opponentHP));
     }
   }
 });
@@ -384,10 +386,12 @@ Q.UI.Text.extend("PlayerHP", {
       x: 0,
       y: 0
     });
+    this.hide();
   },
   step: function(dt) {
     if (this.p.label != playerHP) {
       this.p.label = playerHP;
+      playerGage.refresh(parseInt(playerHP));
     }
   }
 });
