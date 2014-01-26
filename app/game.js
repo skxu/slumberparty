@@ -14,6 +14,8 @@ var autoMiss = false;
 var missed = false;
 var hitFlag = true;
 var readyCon = '';
+var muteBGM = false;
+var muteSFX = false;
 
 var opponentWave = '';
 var opponentZzz = '';
@@ -127,8 +129,7 @@ slumberGame.on('value', function(snapshot){
       //play miss
       opponentZzz.p.play = true;
       opponentZzz.p.frame = 0;
-      var hp = parseInt(opponentHP);
-      opponentHP = (hp - 1).toString();
+      opponentHP = contents.hp
     } else if (contents.hit) {
       //play hit
       opponentWave.p.angle = - 120 - (Math.random() * 40);
@@ -182,7 +183,7 @@ Q.Sprite.extend("Pendulum", {
       if (this.p.swingspeed < 2) {
         this.p.swingspeed = 2;
       }
-      this.p.swingspeed += 0.001;
+      this.p.swingspeed += 0.002;
     } else {
       this.p.swingspeed = 0;
     }
@@ -261,9 +262,11 @@ Q.Sprite.extend("Countdown", {
       this.play('countdown');
     }
 
-    if (countingDown && !gameStarted && this.p.frame == 5) {
+    if (countingDown && !gameStarted && this.p.frame == 0) {
       gameStarted = true;
-      Q.audio.play('bgm.mp3', {loop: true});
+      if (!muteBGM) {
+        Q.audio.play('bgm.mp3', {loop: true});
+      }
       console.log('GAME STARTED');
     }
   }
@@ -370,7 +373,9 @@ Q.Sprite.extend("Wave", {
         targetHit = true;
         hitFlag = true;
         this.p.frame = 0;
-        Q.audio.play('wave.mp3');
+        if (!muteSFX) {
+          Q.audio.play('wave.mp3');
+        }
         slumberGame.update({"UUID":UUID, "miss":false, "hit":true});
         if (this.p.direction == "left") {
           this.p.angle = -120 - (Math.random() * 40);
@@ -416,21 +421,25 @@ Q.Sprite.extend("Zzz", {
     if (this.p.drowzee.p.player) {
       if (autoMiss) {
         this.p.frame = 0;
-        Q.audio.play('snore.mp3');
+        if (!muteSFX) {
+          Q.audio.play('snore.mp3');
+        }
         autoMiss = false;
         var hp = parseInt(playerHP);
-        hp -= 1;
+        hp -= 4;
         playerHP = hp.toString();
-        slumberGame.update({"UUID":UUID, "miss":true, "hit":false});
+        slumberGame.update({"UUID":UUID, "miss":true, "hit":false, "hp":playerHP});
       }
       if (this.p.frame == 1 && Q.inputs['fire'] && !possibleHit && !targetHit) {
         missed = true;
         this.p.frame = 0;
-        Q.audio.play('snore.mp3', {debounce:300});
+        if (!muteSFX) {
+          Q.audio.play('snore.mp3', {debounce:300});
+        }
         var hp = parseInt(playerHP);
         hp -= 1;
         playerHP = hp.toString();
-        slumberGame.update({"UUID":UUID, "miss":true, "hit":false});
+        slumberGame.update({"UUID":UUID, "miss":true, "hit":false, "hp":playerHP});
 
       } else if (this.p.frame == 0 && this.p.direction == "left") {
         this.play('left');
@@ -510,11 +519,30 @@ Q.scene("level1",function(stage) {
       readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
       readyCon.onDisconnect().remove();
     }));
+
+  stage.insert(new Q.UI.Button({
+    sheet:'audio',
+    x:Q.width - 40,
+    y:Q.height - 80
+  }, function() {
+    if (!muteSFX) {
+      this.p.frame = 0;
+      muteSFX = true;
+      muteBGM = true;
+      Q.audio.stop();
+    } else if (muteSFX) {
+      this.p.frame = 1;
+      muteSFX = false;
+      muteBGM = false;
+      //Q.audio.play('bgm.mp3');
+    }
+  }));
+
 });
 
 
 Q.loadTMX("level1.tmx", function() {
-  Q.load("snore.mp3, wave.mp3, bgm.mp3, countdown.png, countdown.json, zzz.png, zzz.json, wave.png, wave.json, drowzee.png, drowzee.json, pendulum.png, pendulum.json, bar.json, bar.png",function() {
+  Q.load("audio.png, audio.json, snore.mp3, wave.mp3, bgm.mp3, countdown.png, countdown.json, zzz.png, zzz.json, wave.png, wave.json, drowzee.png, drowzee.json, pendulum.png, pendulum.json, bar.json, bar.png",function() {
     Q.compileSheets("player.png","player.json");
     Q.compileSheets("bar.png", "bar.json");
     Q.compileSheets("pendulum.png", "pendulum.json");
@@ -522,6 +550,7 @@ Q.loadTMX("level1.tmx", function() {
     Q.compileSheets("wave.png", "wave.json");
     Q.compileSheets("zzz.png", "zzz.json");
     Q.compileSheets("countdown.png", "countdown.json");
+    Q.compileSheets("audio.png", "audio.json");
     Q.animations("countdown", {
       countdown : {frames:[4,3,2,1,0,5], rate: 1, flip: false, loop: false },
     })
