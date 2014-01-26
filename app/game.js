@@ -315,7 +315,7 @@ Q.Sprite.extend("Countdown", {
 Q.UI.Text.extend("PlayerName", {
   init: function(p) {
     this._super(p, {
-      label: playerName,
+      label: "Player One",
       size: 20,
       color: "white",
       family: "Tahoma",
@@ -327,7 +327,9 @@ Q.UI.Text.extend("PlayerName", {
   },
   step: function(dt) {
     if (this.p.label != playerName) {
-      this.p.label = playerName;
+      this.p.label = playerName.toString();
+
+      console.log('updated name to ' + playerName);
     }
   }
 });
@@ -335,7 +337,7 @@ Q.UI.Text.extend("PlayerName", {
 Q.UI.Text.extend("OpponentName", {
   init: function(p) {
     this._super(p, {
-      label: opponentName,
+      label: "Waiting for Opponenet",
       size: 20,
       color: "white",
       family: "Tahoma",
