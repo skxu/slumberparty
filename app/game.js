@@ -16,6 +16,7 @@ var hitFlag = true;
 var readyCon = '';
 var muteBGM = false;
 var muteSFX = false;
+var gameOver = false;
 
 var opponentWave = '';
 var opponentZzz = '';
@@ -23,7 +24,7 @@ window.addEventListener("load",function() {
   var myDiv = document.getElementById("console"); //has to use document.getElementById
   
   var divWidth = myDiv.offsetWidth;
-  var divHeight = myDiv.offsetHeight - 84;
+  var divHeight = myDiv.offsetHeight - 50;
 
   var canvas = $("#game");
   canvas.prop({width: divWidth, height:divHeight});
@@ -36,7 +37,7 @@ window.addEventListener("load",function() {
     console.log("divID: console, width = " + myDiv.offsetWidth);
   }
   var divWidth = myDiv.offsetWidth;
-  var divHeight = myDiv.offsetHeight - 84;
+  var divHeight = myDiv.offsetHeight - 50;
 
   var canvas = document.getElementById("#game"); //has to use document.getElementById
   if(canvas && canvas[0] && canvas[0].getContext('2d')) {
@@ -84,7 +85,7 @@ var slumberReadyRef = new Firebase('https://slumberparty.firebaseIO.com/ready');
 
 slumberReadyRef.on('child_added', function(snapshot) {
   var contents = snapshot.val();
-  globalMessage = "user: " + contents.name + " is now ready";
+  globalMessage = contents.name + " is now ready";
   if (contents.UUID != UUID) {
     opponentReady = true;
   } else {
@@ -96,15 +97,19 @@ var slumberUsersRef = new Firebase('https://slumberparty.firebaseIO.com/users');
 slumberUsersRef.on('child_added', function(snapshot) {
   var contents = snapshot.val();
   //var message = snapshot.message();
-  console.log("We have a new user: " + contents.name);
-  globalMessage = "user UUID: " + contents.name + " has joined the game";
+  //console.log("We have a new user: " + contents.name);
+  globalMessage = contents.name + " has joined the game";
 });
 
 slumberUsersRef.on('child_removed', function(snapshot) {
   var userName = snapshot.name();
   var contents = snapshot.val();
-  console.log(contents.name + " has left");
-  globalMessage = "user UUID: " + contents.name + " has left the game";
+  gameStarted = false;
+  opponentConnected = false;
+  opponentReady = false;
+  Q.audio.stop();
+  //console.log(contents.name + " has left");
+  globalMessage = contents.name + " has left the game";
 
 });
 
@@ -125,7 +130,7 @@ slumberUsersRef.on('child_added', function(snapshot) {
 slumberGame.on('value', function(snapshot){
   var contents = snapshot.val();
   if (contents !== null && contents.UUID != UUID) {
-    if (contents.miss) {
+    if (contents.miss && opponentHP >= 0) {
       //play miss
       opponentZzz.p.play = true;
       opponentZzz.p.frame = 0;
@@ -172,20 +177,21 @@ Q.Sprite.extend("Pendulum", {
       clockwise: false,
       swingspeed: 2,
       maxswingspeed: 15,
-      cy: 0,
+      cy: 20,
     });
     this.add("animation");
 
   },
 
   step: function(dt) {
-    if (gameStarted) {
+    if (gameStarted && !gameOver) {
       if (this.p.swingspeed < 2) {
         this.p.swingspeed = 2;
       }
       this.p.swingspeed += 0.002;
     } else {
       this.p.swingspeed = 0;
+      this.p.angle = 0;
     }
     if (this.p.swingspeed > this.p.maxswingspeed) {
       this.p.swingspeed = 2;
@@ -223,7 +229,21 @@ Q.Sprite.extend("Pendulum", {
 });
 
 
-Q.UI.Text.extend("Annoucer", {
+Q.UI.Container.extend("Bubble", {
+  init: function(p) {
+    this._super(p, {
+      fill: "white",
+      border: 2,
+      insideText: 0,
+      height_margin: 5,
+      width_margin: 5,
+      x: 0,
+      y: -60,
+    });
+  }
+});
+
+Q.UI.Text.extend("Announcer", {
   init: function(p) {
     this._super(p, {
       label: "Welcome",
@@ -238,6 +258,27 @@ Q.UI.Text.extend("Annoucer", {
   step: function(dx) {
     if (this.p.label != globalMessage) {
       this.p.label = globalMessage;
+      this.calcSize();
+      this.p.bubble.fit(2,5);
+    }
+    if (playerHP <= 0 && opponentHP <= 0 && !gameOver) {
+      globalMessage = "TIE?!";
+      this.p.label = globalMessage;
+      this.calcSize();
+      this.p.bubble.fit(2,5);
+      gameOver = true;
+    } else if (playerHP <= 0 && opponentHP > 0 && !gameOver) {
+      globalMessage = opponentName +  " wins the match!";
+      this.p.label = globalMessage;
+      this.calcSize();
+      this.p.bubble.fit(2,5);
+      gameOver = true;
+    } else if (playerHP > 0 && opponentHP <= 0 && !gameOver) {
+      globalMessage = playerName +  " wins the match!";
+      this.p.label = globalMessage;
+      this.calcSize();
+      this.p.bubble.fit(2,5);
+      gameOver = true;
     }
   }
 });
@@ -369,14 +410,16 @@ Q.Sprite.extend("Wave", {
 
   step: function(dt) {
     if (this.p.drowzee.p.player) {
-      if (this.p.frame == 7 && Q.inputs['fire'] && possibleHit && !missed) {
+      if (this.p.frame == 7 && Q.inputs['fire'] && possibleHit && !missed && gameStarted && !gameOver) {
         targetHit = true;
         hitFlag = true;
         this.p.frame = 0;
+        var hp = parseInt(playerHP);
+        playerHP = (hp + 1).toString();
         if (!muteSFX) {
           Q.audio.play('wave.mp3');
         }
-        slumberGame.update({"UUID":UUID, "miss":false, "hit":true});
+        slumberGame.update({"UUID":UUID, "miss":false, "hit":true, "hp":playerHP});
         if (this.p.direction == "left") {
           this.p.angle = -120 - (Math.random() * 40);
         } else {
@@ -419,7 +462,7 @@ Q.Sprite.extend("Zzz", {
 
   step: function(dt) {
     if (this.p.drowzee.p.player) {
-      if (autoMiss) {
+      if (autoMiss && playerHP >= 0) {
         this.p.frame = 0;
         if (!muteSFX) {
           Q.audio.play('snore.mp3');
@@ -430,7 +473,7 @@ Q.Sprite.extend("Zzz", {
         playerHP = hp.toString();
         slumberGame.update({"UUID":UUID, "miss":true, "hit":false, "hp":playerHP});
       }
-      if (this.p.frame == 1 && Q.inputs['fire'] && !possibleHit && !targetHit) {
+      if (this.p.frame == 1 && Q.inputs['fire'] && !possibleHit && !targetHit && playerHP >= 0) {
         missed = true;
         this.p.frame = 0;
         if (!muteSFX) {
@@ -470,11 +513,53 @@ Q.Sprite.extend("Drowzee", {
       sprite: "drowzee",
       direction: "left",
       player: true,
+      spinoff: 1,
+      dead: false,
     });
   this.add('animation');
   },
 
   step: function(dt) {
+    var framerate = 1;
+    if (this.p.y > 1500 || this.p.spinoff < -50 || this.p.spinoff > 50) {
+      this.destroy();
+    }
+    if (this.p.player) {
+      framerate = Math.max(parseInt(playerHP)/400, 1/25);
+      if (playerHP <= 0) {
+        
+        if (!this.p.dead) {
+          this.add('2d');
+          this.p.rand = 10*Math.random();
+          this.p.dead = true;
+        }
+        if (this.p.rand > 5) {
+          this.p.spinoff += 0.05
+          this.p.angle -= this.p.spinoff;
+          
+          this.p.vx = -20;
+          this.p.ay = -10;
+        } else {
+          this.p.angle = -140;
+          this.p.ay = -30;
+        }
+      }
+
+      
+    } else {
+      framerate = Math.max(opponentHP/400, 1/50);
+      if (opponentHP <= 0) {
+        this.p.angle = -140;
+        this.add('2d');
+        this.p.ay = -40;
+      }
+    }
+    if (framerate != 1/50) {
+      Q.animations("drowzee", {
+        left: { frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50], loop: true, rate: framerate, flip: false},
+        right: { frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50], loop: true, rate: framerate, flip: "x"}
+      });
+    }
     if (this.p.direction == "left") {
       this.play("left");
     } else {
@@ -488,10 +573,21 @@ Q.Sprite.extend("Drowzee", {
 
 Q.scene("level1",function(stage) {
 
-  stage.insert(new Q.Bar({x:Q.width/2 + 10, y:Q.height/2}));
-  stage.insert(new Q.Pendulum({x:Q.width/2 + 10, y:Q.height/8}));
-  stage.insert(new Q.Annoucer({x:Q.width/2 + 10, y:20}));
-  var player = stage.insert(new Q.Drowzee({direction:"right", x:Q.width/4 + 10, y:3*Q.height/4}));
+  //stage.insert(new Q.Bar({x:Q.width/2 , y:Q.height/2}));
+  stage.insert(new Q.Pendulum({x:Q.width/2 , y:Q.height/8}));
+  var container = stage.insert(new Q.UI.Container({
+      hidden: false,
+      fill: "gray",
+      border: 5,
+      shadow: 10,
+      shadowColor: "rgba(0,0,0,0.5)",
+      y: 50,
+      x: Q.width/2 
+    }));
+  var announcerBubble = stage.insert(new Q.UI.Container({x:Q.width/2, y:40, fill:"white", border: 2, width_margin: 5, height_margin: 20}));
+  stage.insert(new Q.Announcer({bubble:announcerBubble, color:"black"}), announcerBubble);
+
+  var player = stage.insert(new Q.Drowzee({direction:"right", x:Q.width/4, y:3*Q.height/4}));
   stage.insert(new Q.Wave({angle: 120 + (Math.random() * 40), direction: "right", x:player.p.x + 70, y:player.p.y - 40, frame:7, drowzee:player}));
   stage.insert(new Q.Zzz({frame: 1, x:player.p.x + 180, y:player.p.y - 100, drowzee:player}));
 
