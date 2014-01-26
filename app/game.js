@@ -475,113 +475,10 @@ Q.Sprite.extend("Drowzee", {
 
 });
 
-Q.Sprite.extend("Player",{
 
-  init: function(p) {
-
-    this._super(p, {
-      sheet: "player",  
-      sprite: "player",
-      direction: "right",
-      standingPoints: [ [ -16, 44], [ -23, 35 ], [-23,-48], [23,-48], [23, 35 ], [ 16, 44 ]],
-      duckingPoints : [ [ -16, 44], [ -23, 35 ], [-23,-10], [23,-10], [23, 35 ], [ 16, 44 ]],
-      jumpSpeed: -400,
-      speed: 300
-    });
-
-    this.p.points = this.p.standingPoints;
-
-    this.add('2d, platformerControls, animation');
-
-    this.on("bump.top","breakTile");
-
-    this.on("sensor.tile","checkLadder");
-  },
-
-  checkLadder: function(colObj) {
-    if(colObj.p.ladder) { 
-      this.p.onLadder = true;
-      this.p.ladderX = colObj.p.x;
-    }
-  },
-
-  breakTile: function(col) {
-    if(col.obj.isA("TileLayer")) {
-      if(col.tile == 24) { col.obj.setTile(col.tileX,col.tileY, 36); }
-      else if(col.tile == 36) { col.obj.setTile(col.tileX,col.tileY, 24); }
-    }
-  },
-
-  step: function(dt) {
-    if(this.p.onLadder) {
-      this.p.gravity = 0;
-
-      if(Q.inputs['up']) {
-        this.p.vy = -this.p.speed;
-        this.p.x = this.p.ladderX;
-        this.play("climb");
-      } else if(Q.inputs['down']) {
-        this.p.vy = this.p.speed;
-        this.p.x = this.p.ladderX;
-        this.play("climb");
-      } else {
-        this.p.vy = 0;
-        if(this.p.vx != 0) {
-          this.play("walk_" + this.p.direction);
-        } else {
-          this.play("stand_" + this.p.direction);
-        }
-      }
-    } else {
-      this.p.gravity = 1;
-
-      if(Q.inputs['down']) {
-        this.p.ignoreControls = true;
-        this.play("duck_" + this.p.direction);
-        if(this.p.landed > 0) {
-          this.p.vx = this.p.vx * (1 - dt*2);
-        }
-        this.p.points = this.p.duckingPoints;
-      } else {
-        this.p.ignoreControls = false;
-        this.p.points = this.p.standingPoints;
-
-        if(this.p.vx > 0) {
-          if(this.p.landed > 0) {
-            this.play("walk_right");
-          } else {
-            this.play("jump_right");
-          }
-          this.p.direction = "right";
-        } else if(this.p.vx < 0) {
-          if(this.p.landed > 0) {
-            this.play("walk_left");
-          } else {
-            this.play("jump_left");
-          }
-          this.p.direction = "left";
-        } else {
-          this.play("stand_" + this.p.direction);
-        }
-           
-      }
-    }
-
-    this.p.onLadder = false;
-
-
-    if(this.p.y > 1000) {
-      this.stage.unfollow();
-    }
-
-    if(this.p.y > 2000) {
-      Q.stageScene("level1");
-    }
-  }
-});
 
 Q.scene("level1",function(stage) {
-  //Q.stageTMX("level1.tmx",stage);
+
   stage.insert(new Q.Bar({x:Q.width/2 + 10, y:Q.height/2}));
   stage.insert(new Q.Pendulum({x:Q.width/2 + 10, y:Q.height/8}));
   stage.insert(new Q.Annoucer({x:Q.width/2 + 10, y:20}));
@@ -613,12 +510,11 @@ Q.scene("level1",function(stage) {
       readyCon = slumberReadyRef.push({"name":playerName, "UUID":UUID, "ready":true});
       readyCon.onDisconnect().remove();
     }));
-  //stage.add("viewport").follow(Q("Player").first());
 });
 
 
 Q.loadTMX("level1.tmx", function() {
-  Q.load("snore.mp3, wave.mp3, bgm.mp3, countdown.png, countdown.json, zzz.png, zzz.json, wave.png, wave.json, drowzee.png, drowzee.json, pendulum.png, pendulum.json, bar.json, bar.png, player.json, player.png",function() {
+  Q.load("snore.mp3, wave.mp3, bgm.mp3, countdown.png, countdown.json, zzz.png, zzz.json, wave.png, wave.json, drowzee.png, drowzee.json, pendulum.png, pendulum.json, bar.json, bar.png",function() {
     Q.compileSheets("player.png","player.json");
     Q.compileSheets("bar.png", "bar.json");
     Q.compileSheets("pendulum.png", "pendulum.json");
@@ -644,17 +540,6 @@ Q.loadTMX("level1.tmx", function() {
     Q.animations("zzz", {
       left: { frames: [0,1], rate: 1/2, flip: false, loop: false },
       right: { frames: [0,1], rate: 1/2, flip: "x", loop: false}
-    });
-    Q.animations("player", {
-      walk_right: { frames: [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip: false, loop: true },
-      walk_left: { frames:  [0,1,2,3,4,5,6,7,8,9,10], rate: 1/15, flip:"x", loop: true },
-      jump_right: { frames: [13], rate: 1/10, flip: false },
-      jump_left: { frames:  [13], rate: 1/10, flip: "x" },
-      stand_right: { frames:[14], rate: 1/10, flip: false },
-      stand_left: { frames: [14], rate: 1/10, flip:"x" },
-      duck_right: { frames: [15], rate: 1/10, flip: false },
-      duck_left: { frames:  [15], rate: 1/10, flip: "x" },
-      climb: { frames:  [16, 17], rate: 1/3, flip: false }
     });
     Q.stageScene("level1");
   });
