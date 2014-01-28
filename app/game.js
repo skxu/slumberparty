@@ -123,7 +123,7 @@ slumberGame.on('value', function(snapshot){
   var contents = snapshot.val();
   if (contents !== null && contents.UUID != UUID) {
     if (init_flag) {
-      opponentHP = 50;
+      opponentHP = "50";
       init_flag = false;
     } else if (contents.miss && opponentHP >= 0) {
       //play miss
