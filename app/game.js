@@ -1,5 +1,6 @@
 
 var globalMessage = '';
+var init_flag = true;
 var opponentConnected = false;
 var opponentName = '';
 var playerReady = false;
@@ -121,7 +122,10 @@ slumberUsersRef.on('child_added', function(snapshot) {
 slumberGame.on('value', function(snapshot){
   var contents = snapshot.val();
   if (contents !== null && contents.UUID != UUID) {
-    if (contents.miss && opponentHP >= 0) {
+    if (init_flag) {
+      opponentHP = 50;
+      init_flag = false;
+    } else if (contents.miss && opponentHP >= 0) {
       //play miss
       opponentZzz.p.play = true;
       opponentZzz.p.frame = 0;
